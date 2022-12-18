@@ -1,0 +1,32 @@
+/dts-v1/;
+/plugin/;
+/ {
+    compatible = "allwinner,sun50i-a64";
+    fragment@0 {
+        target = <&pio>;
+        __overlay__ {
+            relay_pins: relay_pins {
+                pins = "PH5";
+                function = "gpio_out";
+            };
+        };
+    };
+    fragment@1 {
+        target-path = "/";
+
+        __overlay__ {
+            relays {
+                compatible = "gpio-leds";
+                pinctrl-names = "default";
+                pinctrl-0 = <&relay_pins>;
+
+                host_power_relay {    
+                    label = "host:power";
+                    gpios = <&pio 7 5 0>; /* PH5 */
+                    linux,default-trigger = "none";
+                    default-state = "off";
+                };
+            };
+        };
+    };
+};
